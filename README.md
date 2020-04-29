@@ -1,5 +1,5 @@
 ![](https://github.com/emilgoldsmith/SpeedcubingTrainer/workflows/CI/badge.svg)
-[![codecov](https://codecov.io/gh/emilgoldsmith/SpeedcubingTrainer/branch/master/graph/badge.svg)](https://codecov.io/gh/PublishEasy/Publisher)
+[![codecov](https://codecov.io/gh/emilgoldsmith/SpeedcubingTrainer/branch/master/graph/badge.svg)](https://codecov.io/gh/emilgoldsmith/SpeedcubingTrainer)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=emilgoldsmith/SpeedcubingTrainer)](https://dependabot.com)
 
 # Speedcubing Trainer
