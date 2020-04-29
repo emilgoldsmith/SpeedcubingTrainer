@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "CommonJS",
+    "skipLibCheck": true,
+    "alwaysStrict": true,
+    // "assumeChangesOnlyAffectDirectDependencies": true,
+    "importsNotUsedAsValues": "remove",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noImplicitThis": true,
+    "checkJs": false,
+    "isolatedModules": true,
+    "jsx": "react",
+    "allowJs": true,
+    "outDir": "dist",
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "baseUrl": "."
+  },
+  "include": ["src/**/*", "config/**/*.ts"]
+}
