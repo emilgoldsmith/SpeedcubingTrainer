@@ -1,0 +1,5 @@
+- As a user I want to be able to store all the PLL cases and algorithms I already know + am in the process of learning
+- I want to have a never-ending stream of practice scenarios that display a PLL case from a random side with random AUF on a random cross color, timing me, and as I apply algorithms to a solved cube it should show me what state my cube is expected to be in
+- When I'm done I expect it to give me an algorithm to solve my cube easily and fast
+- I expect to be able to see statistics on what my weakest cases are
+- I expect the software to intelligently choose which case I should practice next
