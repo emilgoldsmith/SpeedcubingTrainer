@@ -28,5 +28,8 @@ jobs:
         # It uses the PREVIOUS_PASSED_TESTS_FILE_PATH set above
         run: ./scripts/test-acceptance.sh
 
+      - name: Change owner of regressions tracking file to us (Docker writes as sudo)
+        run: chown $USER:$USER "$PREVIOUS_PASSED_TESTS_FILE_PATH"
+
       - name: Persist previous passed tests to track regressions
         run: curl "$POST_PREVIOUS_PASSED_TESTS_URL" --data "$(cat $PREVIOUS_PASSED_TESTS_FILE_PATH)""
