@@ -5,16 +5,7 @@ const baseUrl = 'http://localhost:8080';
 new E2ETester({
   name: 'Homepage',
   initialPageUrl: `${baseUrl}/`,
-})
-  .assertStatusCode(200)
-  .containsText('Login');
-
-new E2ETester({
-  name: 'Login Page',
-  initialPageUrl: `${baseUrl}/login`,
-})
-  .assertStatusCode(200)
-  .containsCssSelectorMatch('input');
+}).assertStatusCode(200);
 
 new E2ETester({
   name: 'Non existent page',

@@ -97,7 +97,7 @@ module.exports = {
       files: ['*.js'],
       env: {
         commonjs: true,
-        'shared-node-browser': true,
+        node: true,
       },
       extends: javascriptCompatibleConfigs,
       rules: javascriptCompatibleRules,

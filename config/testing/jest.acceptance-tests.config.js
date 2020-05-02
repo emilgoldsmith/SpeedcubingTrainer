@@ -1,6 +1,6 @@
 const mainConfig = {
   ...require('./jest.config'),
-  reporters: ['default', '<rootDir>/config/testing/acceptance-test-reporter'],
+  reporters: ['<rootDir>/config/testing/acceptance-test-reporter'],
 };
 const common = require('lodash').omit(mainConfig, 'projects');
 

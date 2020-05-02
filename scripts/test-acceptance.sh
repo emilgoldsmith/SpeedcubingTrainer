@@ -55,4 +55,5 @@ build_docker_image () {
 
 build_docker_image
 
-run_command_in_docker_with_colors_ctrl_c_capabilitiies_and_updating_file_system $DIRECTORY/pre-configured-commands/typescript.sh --watch --noEmit
+# Need to set env so not using the functions above and doesn't seem worth it to create new function right now
+docker run --rm -t --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" --env PREVIOUS_PASSED_TESTS_FILE_PATH $DOCKER_IMAGE $DIRECTORY/pre-configured-commands/acceptance-tests.sh

@@ -16,25 +16,26 @@ cd $ROOT_DIRECTORY
 DIRECTORY=scripts
 ROOT_DIRECTORY=.
 
+DOCKER_IMAGE=publisher-base
 
 run_command_in_docker_with_write_access () {
-    docker run --rm --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" publisher-base "$@"
+    docker run --rm --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" $DOCKER_IMAGE "$@"
 }
 
 run_command_in_docker_with_colors_ctrl_c_capabilitiies_and_updating_file_system () {
-    docker run --rm -it --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" publisher-base "$@"
+    docker run --rm -it --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" $DOCKER_IMAGE "$@"
 }
 
 run_command_in_docker_with_colors () {
-    docker run --rm -t publisher-base "$@"
+    docker run --rm -t $DOCKER_IMAGE "$@"
 }
 
 run_command_in_docker_with_colors_and_write () {
-    docker run --rm -t --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" publisher-base "$@"
+    docker run --rm -t --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" $DOCKER_IMAGE "$@"
 }
 
 run_command_in_docker () {
-    docker run --rm publisher-base "$@"
+    docker run --rm $DOCKER_IMAGE "$@"
 }
 
 run_local_dev_docker_compose_command () {
@@ -46,7 +47,7 @@ run_production_docker_compose_command () {
 }
 
 build_docker_image () {
-    DOCKER_BUILDKIT=1 docker build -t publisher-base -f config/docker/Dockerfile --target local-dev ./
+    DOCKER_BUILDKIT=1 docker build -t $DOCKER_IMAGE -f config/docker/Dockerfile --target local-dev ./
 }
 # endregion
 
