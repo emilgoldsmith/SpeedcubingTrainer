@@ -1,0 +1,5 @@
+buttons:
+  - title: Test acceptance test workflow
+    action: "run_acceptance"
+    description: Test acceptance test workflow
+
