@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {
   Box,
   CardContent,
@@ -6,7 +5,7 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
 
 export const PllTrainer: React.FC = () => (
   <Paper elevation={3}>
@@ -23,25 +22,25 @@ export const PllTrainer: React.FC = () => (
   </Paper>
 );
 
-// type State = { startTime: number | null };
-// type Action = {
-//   type: 'start';
-//   payload: { currentTime: number };
-// };
+type State = { startTime: number | null };
+type Action = {
+  type: 'start';
+  payload: { currentTime: number };
+};
 
-// function reducer(state: State, action: Action): State {
-//   switch (action.type) {
-//     case 'start': {
-//       return { startTime: action.payload.currentTime };
-//     }
-//     default:
-//       throw new Error();
-//   }
-// }
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'start': {
+      return { startTime: action.payload.currentTime };
+    }
+    default:
+      throw new Error();
+  }
+}
 
-// const Timer: React.FC = () => {
-//   const [state, dispatch] = useReducer(reducer, { startTime: null });
-// };
+const Timer: React.FC = () => {
+  const [state, dispatch] = useReducer(reducer, { startTime: null });
+};
 
 type TimerDisplayProps = {
   time: string;
