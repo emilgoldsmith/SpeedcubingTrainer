@@ -1,6 +1,8 @@
 name: Acceptance Tests
 
 on:
+  repository_dispatch:
+    types: [run_acceptance]
   schedule:
     #       m h d m dw (minutes, hours, day of month, month, day of week) => run  at 08:00 every day
     - cron: 0 8 * * *
