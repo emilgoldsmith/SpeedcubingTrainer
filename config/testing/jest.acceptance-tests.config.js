@@ -1,6 +1,6 @@
 const mainConfig = {
   ...require('./jest.config'),
-  reporters: ['<rootDir>/config/testing/acceptance-test-reporter'],
+  reporters: ['default', '<rootDir>/config/testing/acceptance-test-reporter'],
 };
 const common = require('lodash').omit(mainConfig, 'projects');
 
@@ -10,7 +10,7 @@ module.exports = {
     {
       ...common,
       displayName: 'Acceptance Tests',
-      testEnvironment: 'node',
+      testEnvironment: 'jsdom',
       testMatch: [
         '<rootDir>/src/__tests__/acceptance-tests/run-acceptance-tests.ts',
       ],

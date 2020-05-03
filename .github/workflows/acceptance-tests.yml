@@ -11,6 +11,7 @@ jobs:
   acceptance-tests:
     env:
       PREVIOUS_PASSED_TESTS_FILE_PATH: ./previous-passed-tests.json
+      ACCEPTANCE_TEST_REGRESSIONS_FILE_PATH: ./test-regressions.json
       GET_PREVIOUS_PASSED_TESTS_URL: ${{ secrets.getPreviousPassedTestsUrl }}
       POST_PREVIOUS_PASSED_TESTS_URL: ${{ secrets.postPreviousPassedTestsUrl }}
     runs-on: ubuntu-latest
@@ -25,8 +26,18 @@ jobs:
         run: curl "$GET_PREVIOUS_PASSED_TESTS_URL" > $PREVIOUS_PASSED_TESTS_FILE_PATH
 
       - name: Run Acceptance Tests
-        # It uses the PREVIOUS_PASSED_TESTS_FILE_PATH set above
-        run: ./scripts/test-acceptance.sh
+        # It uses the file path env variables set above
+        run: ./scripts/test-acceptance.sh || echo "There are failing tests but we only care about regressions which we check for below"
 
       - name: Persist previous passed tests to track regressions
         run: curl "$POST_PREVIOUS_PASSED_TESTS_URL" --data "$(cat $PREVIOUS_PASSED_TESTS_FILE_PATH)"
+
+      - name: Check if there were regressions
+        run: echo -n "[]" | cmp --silent $ACCEPTANCE_TEST_REGRESSIONS_FILE_PATH -
+
+      - name: Store regressions as artifact if there were any
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: Regressions json
+          path: ${{ env.ACCEPTANCE_TEST_REGRESSIONS_FILE_PATH }}

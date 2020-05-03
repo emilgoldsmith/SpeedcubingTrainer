@@ -1,17 +1,14 @@
-import {
-  AcceptanceTestCase,
-  FeatureAcceptanceTests,
-} from './test-case-objects';
+import { FeatureAcceptanceTests } from './feature-acceptance-tests';
+import { ImplementedAcceptanceTestCase } from './implemented-acceptance-test-case';
 
 const tests = [
-  new AcceptanceTestCase({
+  new ImplementedAcceptanceTestCase({
     given: 'the PLL trainer',
     when: 'I do nothing',
     then: [
-      'I should see a PLL trainer header',
+      "I should see a 'PLL Trainer' header",
       "I should see a button labelled 'Start'",
     ],
-    notYetImplemented: true,
   }),
 ];
 

@@ -55,5 +55,7 @@ build_docker_image () {
 
 build_docker_image
 
-# Need to set env so not using the functions above and doesn't seem worth it to create new function right now
-docker run --rm -t --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" --env PREVIOUS_PASSED_TESTS_FILE_PATH $DOCKER_IMAGE $DIRECTORY/pre-configured-commands/acceptance-tests.sh
+# We don't use functions as we need to pass in environment variables to Docker
+# One could create a more complex function that can take both commandline args + which env variables to pass on
+# but seems it's not worth the added complexity.
+docker run --rm -t --mount "type=bind,source=$(pwd),target=/app,consistency=consistent" --env PREVIOUS_PASSED_TESTS_FILE_PATH --env ACCEPTANCE_TEST_REGRESSIONS_FILE_PATH $DOCKER_IMAGE $DIRECTORY/pre-configured-commands/acceptance-tests.sh

@@ -6,8 +6,8 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 
-class Tester {
-  protected throwError(errorDescriptor: string | Error): never {
+class ErrorThrower {
+  throw(errorDescriptor: string | Error): never {
     const error =
       errorDescriptor instanceof Error
         ? errorDescriptor
@@ -32,14 +32,14 @@ class Tester {
   }
 }
 
-export class ReactTester extends Tester {
+export class ReactTester {
   private testingLibraryQueries: RenderResult | null;
   private renderError: Error | null = null;
   private currentUrlPath: string | null = null;
   private asyncAssert = false;
+  private errorThrower = new ErrorThrower();
 
   constructor(reactNode: React.ReactNode, initialPath = '/') {
-    super();
     try {
       this.testingLibraryQueries = render(
         <MemoryRouter initialEntries={[initialPath]}>
@@ -61,7 +61,7 @@ export class ReactTester extends Tester {
   }
 
   assertRenders(): this {
-    if (this.renderError !== null) this.throwError(this.renderError);
+    if (this.renderError !== null) this.errorThrower.throw(this.renderError);
     expect(this.testingLibraryQueries).not.toBe(null);
     return this;
   }
@@ -84,11 +84,29 @@ export class ReactTester extends Tester {
       const error = e instanceof Error ? e : new Error(e);
       const testingLibraryError: string = error.message;
       const buttons = testingLibraryError.match(
-        /^\s+-+$\n\s+button:[\s\S]+^\s+-+$/gm,
+        /^\s+-+$\n\s+button:[\s\S]+?^\s+-+$/gm,
       );
       const buttonsString: string = (buttons || []).join('\n');
-      this.throwError(
+      this.errorThrower.throw(
         `Node has no button with name ${name}\nAccessible buttons in node:\n${buttonsString}`,
+      );
+    }
+    return this;
+  }
+
+  assertHasHeading(heading: string): this {
+    const queries = this.getQueries();
+    try {
+      queries.getByRole('heading', { name: heading });
+    } catch (e) {
+      const error = e instanceof Error ? e : new Error(e);
+      const testingLibraryError: string = error.message;
+      const headings = testingLibraryError.match(
+        /^\s+-+$\n\s+heading:[\s\S]+?^\s+-+$/gm,
+      );
+      const headingsString: string = (headings || []).join('\n');
+      this.errorThrower.throw(
+        `Node has no button with name ${name}\nAccessible headings in node:\n${headingsString}`,
       );
     }
     return this;
@@ -125,15 +143,16 @@ export class ReactTester extends Tester {
 
   private getQueries(): RenderResult {
     if (this.testingLibraryQueries === null) {
-      this.throwError(
+      this.errorThrower.throw(
         `There seems to have been an issue rendering the React element. Remember to call assertRenders in a test and make sure that passes. The error was:\n${this.renderError}`,
       );
+      throw 'this is a type hack, the above function already throws but Typescript doesn\'t seem to infer from it as it usually does despite the never type';
     }
     return this.testingLibraryQueries;
   }
 }
 
-class HTMLElementTester extends Tester {
+class HTMLElementTester extends ErrorThrower {
   private element: HTMLElement;
 
   constructor(element: HTMLElement) {
