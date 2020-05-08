@@ -1,26 +1,44 @@
 import {
   Box,
+  Button,
   CardContent,
   CardHeader,
+  makeStyles,
   Paper,
-  Typography,
 } from '@material-ui/core';
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
-export const PllTrainer: React.FC = () => (
-  <Paper elevation={3}>
-    <Box borderBottom={1}>
-      <CardHeader
-        title="PLL Trainer"
-        titleTypographyProps={{ align: 'center', component: 'h1' }}
-      />
-    </Box>
-    <CardContent>
-      <TimerDisplay time="0.000" />
-      <PLLCube algorithm="M2 U M2 U2 M2 U M2" />
-    </CardContent>
-  </Paper>
-);
+const useStyles = makeStyles({
+  cardContainer: {
+    '& > *': {
+      margin: 'auto',
+      textAlign: 'center',
+      display: 'block',
+      '&:not(:last-child)': {
+        marginBottom: '20px',
+      },
+    },
+  },
+});
+
+export const PllTrainer: React.FC = () => {
+  const classes = useStyles();
+  return (
+    <Paper elevation={3}>
+      <Box borderBottom={1}>
+        <CardHeader
+          title="PLL Trainer"
+          titleTypographyProps={{ align: 'center', component: 'h1' }}
+        />
+      </Box>
+      <CardContent className={classes.cardContainer}>
+        <Button variant="contained" color="primary">
+          Start
+        </Button>
+      </CardContent>
+    </Paper>
+  );
+};
 
 // type State = { startTime: number | null };
 // type Action = {
@@ -42,42 +60,42 @@ export const PllTrainer: React.FC = () => (
 //   const [state, dispatch] = useReducer(reducer, { startTime: null });
 // };
 
-type TimerDisplayProps = {
-  time: string;
-};
+// type TimerDisplayProps = {
+//   time: string;
+// };
 
-const TimerDisplay: React.FC<TimerDisplayProps> = ({ time }) => (
-  <Typography variant="h6" component="span">
-    {time}
-  </Typography>
-);
+// const TimerDisplay: React.FC<TimerDisplayProps> = ({ time }) => (
+//   <Typography variant="h6" component="span">
+//     {time}
+//   </Typography>
+// );
 
-type PLLCubeProps = {
-  algorithm: string;
-};
+// type PLLCubeProps = {
+//   algorithm: string;
+// };
 
-const PRIMARY_VISUAL_CUBE_HOST = 'cube.crider.co.uk';
-const BACKUP_VISUAL_CUBE_HOST = '178.62.114.213';
+// const PRIMARY_VISUAL_CUBE_HOST = 'cube.crider.co.uk';
+// const BACKUP_VISUAL_CUBE_HOST = '178.62.114.213';
 
-const PLLCube: React.FC<PLLCubeProps> = ({ algorithm }) => {
-  const [visualCubeHost, setVisualCubeHost] = useState(
-    PRIMARY_VISUAL_CUBE_HOST,
-  );
-  const useBackupVisualCubeHost = useCallback(
-    () => setVisualCubeHost(BACKUP_VISUAL_CUBE_HOST),
-    [],
-  );
-  const urlFriendlyAlg = removeSpaces(algorithm);
-  const baseUrl = `http://${visualCubeHost}/visualcube.php?fmt=png&bg=t&sch=wrgyob&size=150&stage=ll&alg=`;
-  return (
-    <img
-      onError={useBackupVisualCubeHost}
-      src={baseUrl + urlFriendlyAlg}
-      alt="Cube displaying PLL case"
-    />
-  );
-};
+// const PLLCube: React.FC<PLLCubeProps> = ({ algorithm }) => {
+//   const [visualCubeHost, setVisualCubeHost] = useState(
+//     PRIMARY_VISUAL_CUBE_HOST,
+//   );
+//   const useBackupVisualCubeHost = useCallback(
+//     () => setVisualCubeHost(BACKUP_VISUAL_CUBE_HOST),
+//     [],
+//   );
+//   const urlFriendlyAlg = removeSpaces(algorithm);
+//   const baseUrl = `http://${visualCubeHost}/visualcube.php?fmt=png&bg=t&sch=wrgyob&size=150&stage=ll&alg=`;
+//   return (
+//     <img
+//       onError={useBackupVisualCubeHost}
+//       src={baseUrl + urlFriendlyAlg}
+//       alt="Cube displaying PLL case"
+//     />
+//   );
+// };
 
-function removeSpaces(str: string): string {
-  return str.replace(/\s+/g, '');
-}
+// function removeSpaces(str: string): string {
+//   return str.replace(/\s+/g, '');
+// }
