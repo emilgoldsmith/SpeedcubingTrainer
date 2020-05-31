@@ -5,7 +5,11 @@ export interface Then {
   runAssertion(tester: ReactTester): ReactTester;
 }
 
-export class Unimplemented implements Then {
+export function isThen(x: unknown): x is Then {
+  return ((x as Then).toString && (x as Then).runAssertion) !== undefined;
+}
+
+export class UnimplementedThen implements Then {
   private readonly spec: string;
 
   constructor(spec: string) {
@@ -18,7 +22,7 @@ export class Unimplemented implements Then {
 
   runAssertion(): ReactTester {
     throw new Error(
-      `'${this.spec}' has not been implemented yet. Please implement it to complete the test case`,
+      `Then implementation '${this.spec}' has not been implemented yet. Please implement it to complete the test case`,
     );
   }
 }

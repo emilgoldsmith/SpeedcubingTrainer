@@ -7,7 +7,99 @@ import {
   Paper,
   Typography,
 } from '@material-ui/core';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useReducer, useState } from 'react';
+
+export type State = {
+  trainerState: 'initial' | 'in between tests';
+  currentAlg: string | null;
+};
+type Action = {
+  type: 'start training';
+};
+const defaultInitialState: State = {
+  trainerState: 'initial',
+  currentAlg: null,
+};
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'start training': {
+      return { ...state, trainerState: 'in between tests' };
+    }
+    default:
+      throw new Error();
+  }
+}
+
+export const PLLTrainer: React.FC<{
+  initialState?: State;
+}> = ({ initialState = defaultInitialState }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const startTraining = useCallback(
+    () => dispatch({ type: 'start training' }),
+    [],
+  );
+  const renderForState: {
+    [key in State['trainerState']]: React.ReactElement;
+  } = {
+    initial: <PLLTrainerInitial startTraining={startTraining} />,
+    'in between tests': <PLLTrainerInBetweenTests />,
+  };
+  return renderForState[state.trainerState];
+};
+
+const PLLTrainerInitial: React.FC<{ startTraining: () => void }> = ({
+  startTraining,
+}) => {
+  return (
+    <PllTrainerPaper>
+      <Button onClick={startTraining} variant="contained" color="primary">
+        Start
+      </Button>
+    </PllTrainerPaper>
+  );
+};
+
+const PLLTrainerInBetweenTests: React.FC = () => {
+  return (
+    <PllTrainerPaper>
+      <Typography align="center" component="h2" variant="h4">
+        0.00
+      </Typography>
+      <LLCube algorithm=""></LLCube>
+      <Typography align="center" component="h2" variant="h5">
+        Press Space To Begin
+      </Typography>
+    </PllTrainerPaper>
+  );
+};
+
+const useStyles = makeStyles({
+  cardContainer: {
+    '& > *': {
+      margin: 'auto',
+      textAlign: 'center',
+      display: 'block',
+      '&:not(:last-child)': {
+        marginBottom: '20px',
+      },
+    },
+  },
+});
+
+const PllTrainerPaper: React.FC = ({ children }) => {
+  const classes = useStyles();
+  return (
+    <Paper elevation={3}>
+      <Box borderBottom={1}>
+        <CardHeader
+          title="PLL Trainer"
+          titleTypographyProps={{ align: 'center', component: 'h1' }}
+        />
+      </Box>
+      <CardContent className={classes.cardContainer}>{children}</CardContent>
+    </Paper>
+  );
+};
 
 type LLCubeProps = {
   algorithm: string;
@@ -38,58 +130,6 @@ const LLCube: React.FC<LLCubeProps> = ({ algorithm }) => {
 function removeSpaces(str: string): string {
   return str.replace(/\s+/g, '');
 }
-
-const useStyles = makeStyles({
-  cardContainer: {
-    '& > *': {
-      margin: 'auto',
-      textAlign: 'center',
-      display: 'block',
-      '&:not(:last-child)': {
-        marginBottom: '20px',
-      },
-    },
-  },
-});
-
-export const PLLTrainer: React.FC = () => {
-  return (
-    <PllTrainerPaper>
-      <Button variant="contained" color="primary">
-        Start
-      </Button>
-    </PllTrainerPaper>
-  );
-};
-
-export const PLLTrainerAfterStart: React.FC = () => {
-  return (
-    <PllTrainerPaper>
-      <Typography align="center" component="h2" variant="h4">
-        0.00
-      </Typography>
-      <LLCube algorithm=""></LLCube>
-      <Typography align="center" component="h2" variant="h5">
-        Press Space To Begin
-      </Typography>
-    </PllTrainerPaper>
-  );
-};
-
-const PllTrainerPaper: React.FC = ({ children }) => {
-  const classes = useStyles();
-  return (
-    <Paper elevation={3}>
-      <Box borderBottom={1}>
-        <CardHeader
-          title="PLL Trainer"
-          titleTypographyProps={{ align: 'center', component: 'h1' }}
-        />
-      </Box>
-      <CardContent className={classes.cardContainer}>{children}</CardContent>
-    </Paper>
-  );
-};
 
 // type State = { startTime: number | null };
 // type Action = {
