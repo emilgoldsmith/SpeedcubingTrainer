@@ -40,7 +40,7 @@ describe('Login', () => {
 
   describe('login button', () => {
     it('exists', () => {
-      getLoginTester().assertHasButtonNamed('Login');
+      getLoginTester().assertHasButtonLabelled('Login');
     });
 
     it('stays on initial path when no credentials provided', () => {

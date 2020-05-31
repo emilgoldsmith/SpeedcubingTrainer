@@ -1,4 +1,4 @@
-import { AcceptanceTestCase } from 'src/__tests__/acceptance-tests/types';
+import { AcceptanceTestCase } from 'src/__tests__/acceptance-tests/implemented-acceptance-test-case';
 
 export class FeatureAcceptanceTests {
   private featureName: string;

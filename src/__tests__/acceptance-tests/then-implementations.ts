@@ -1,17 +1,70 @@
 import { ReactTester } from 'src/common/components/test-utilities/react-tester';
 
-const thenStringToAsserter = {
-  "I should see a 'PLL Trainer' header": (tester: ReactTester) =>
-    tester.assertHasHeading('PLL Trainer'),
-  "I should see a button labelled 'Start'": (tester: ReactTester) =>
-    tester.assertHasButtonNamed('Start'),
-} as const;
+export interface Then {
+  toString(): string;
+  runAssertion(tester: ReactTester): ReactTester;
+}
 
-export type ImplementedThenStrings = keyof typeof thenStringToAsserter;
+export class Unimplemented implements Then {
+  private readonly spec: string;
 
-export function applyThenAssertion(
-  tester: ReactTester,
-  thenString: ImplementedThenStrings,
-): ReactTester {
-  return thenStringToAsserter[thenString](tester);
+  constructor(spec: string) {
+    this.spec = spec;
+  }
+
+  toString(): string {
+    return this.spec;
+  }
+
+  runAssertion(): ReactTester {
+    throw new Error(
+      `'${this.spec}' has not been implemented yet. Please implement it to complete the test case`,
+    );
+  }
+}
+
+export class IShouldSeeAHeadingTitled implements Then {
+  private readonly header: string;
+
+  constructor(header: string) {
+    this.header = header;
+  }
+
+  toString(): string {
+    return `I should see a heading titled '${this.header}'`;
+  }
+
+  runAssertion(tester: ReactTester): ReactTester {
+    return tester.assertHasHeadingTitled(this.header);
+  }
+}
+
+export class IShouldSeeAButtonLabelled implements Then {
+  private readonly label: string;
+
+  constructor(label: string) {
+    this.label = label;
+  }
+
+  toString(): string {
+    return `I should see a button labelled '${this.label}'`;
+  }
+
+  runAssertion(tester: ReactTester): ReactTester {
+    return tester.assertHasButtonLabelled(this.label);
+  }
+}
+
+export class IShouldSeeASolvedCube implements Then {
+  toString(): string {
+    return 'I should see a solved cube';
+  }
+
+  runAssertion(tester: ReactTester): ReactTester {
+    return tester.assertHasImgWithSrcMatching((src) =>
+      /\/visualcube.php\?fmt=png&bg=t&sch=wrgyob&size=150&stage=ll&alg=$/.test(
+        src,
+      ),
+    );
+  }
 }

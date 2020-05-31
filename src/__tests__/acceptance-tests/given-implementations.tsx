@@ -1,16 +1,39 @@
 import * as React from 'react';
 
-import { PllTrainer } from 'src/common/components/pll-trainer/PllTrainer';
+import {
+  PLLTrainer as PLLTrainerInitial,
+  PLLTrainerAfterStart,
+} from 'src/common/components/pll-trainer/PllTrainer';
 import { ReactTester } from 'src/common/components/test-utilities/react-tester';
 
-const givenStringToInitialStateMap = {
-  'the PLL trainer': () => new ReactTester(<PllTrainer />),
-} as const;
+export interface Given {
+  toString(): string;
+  getTester(): ReactTester;
+}
 
-export type ImplementedGivenStrings = keyof typeof givenStringToInitialStateMap;
+type PLLTrainerStates = 'after start' | 'initial';
+export class PLLTrainer implements Given {
+  private readonly state: PLLTrainerStates;
+  constructor({ state }: { state: PLLTrainerStates } = { state: 'initial' }) {
+    this.state = state;
+  }
 
-export function getInitialStateFromGiven(
-  givenString: ImplementedGivenStrings,
-): ReactTester {
-  return givenStringToInitialStateMap[givenString]().assertRenders();
+  toString(): string {
+    const stateToStringMap: { [state in PLLTrainerStates]: string } = {
+      initial: '',
+      'after start': ' after pressing start',
+    };
+    return `the PLL trainer${stateToStringMap[this.state]}`;
+  }
+
+  getTester(): ReactTester {
+    switch (this.state) {
+      case 'initial':
+        return new ReactTester(<PLLTrainerInitial />);
+      case 'after start':
+        return new ReactTester(<PLLTrainerAfterStart />);
+      default:
+        throw new Error(`Unexpected invalid state: ${this.state}`);
+    }
+  }
 }

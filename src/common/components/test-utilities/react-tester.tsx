@@ -76,40 +76,62 @@ export class ReactTester {
     return this;
   }
 
-  assertHasButtonNamed(name: string): this {
+  assertHasButtonLabelled(label: string): this {
+    this.assertHasNodeWithAria({ role: 'button', name: label });
+    return this;
+  }
+
+  assertHasHeadingTitled(heading: string): this {
+    this.assertHasNodeWithAria({ role: 'heading', name: heading });
+    return this;
+  }
+
+  assertHasImgWithSrcMatching(srcMatcher: (src: string) => boolean): this {
+    this.assertHasNodeWithAria({ role: 'img' });
     const queries = this.getQueries();
-    try {
-      queries.getByRole('button', { name });
-    } catch (e) {
-      const error = e instanceof Error ? e : new Error(e);
-      const testingLibraryError: string = error.message;
-      const buttons = testingLibraryError.match(
-        /^\s+-+$\n\s+button:[\s\S]+?^\s+-+$/gm,
-      );
-      const buttonsString: string = (buttons || []).join('\n');
+    const images = queries.getAllByRole('img');
+    const imageWithCorrectSrc = images.find((imgElement) =>
+      srcMatcher(imgElement.getAttribute('src') || ''),
+    );
+    if (imageWithCorrectSrc === undefined) {
       this.errorThrower.throw(
-        `Node has no button with name ${name}\nAccessible buttons in node:\n${buttonsString}`,
+        `There were no images with a matching src attribute\nSrc attributes of all images in tested react: ${images
+          .map((x) => x.getAttribute('src') || 'null')
+          .join(', ')}`,
       );
     }
     return this;
   }
 
-  assertHasHeading(heading: string): this {
+  private assertHasNodeWithAria({
+    role,
+    name,
+  }: {
+    role: string;
+    name?: string;
+  }): void {
     const queries = this.getQueries();
     try {
-      queries.getByRole('heading', { name: heading });
+      if (name !== undefined) queries.getByRole(role, { name });
+      else queries.getByRole(role);
     } catch (e) {
       const error = e instanceof Error ? e : new Error(e);
       const testingLibraryError: string = error.message;
-      const headings = testingLibraryError.match(
-        /^\s+-+$\n\s+heading:[\s\S]+?^\s+-+$/gm,
+      // Not relevant for global flag, but there is a parsing error from eslint. You can see the rule here: https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/src/rules/prefer-regexp-exec.ts
+      // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+      const nodesWithWantedRole = testingLibraryError.match(
+        new RegExp(String.raw`^\s+-+$\n\s+${role}:[\s\S]+?^\s+-+$`, 'gm'),
       );
-      const headingsString: string = (headings || []).join('\n');
+      const nodesWithWantedRoleString: string = (
+        nodesWithWantedRole || []
+      ).join('\n');
       this.errorThrower.throw(
-        `Node has no button with name ${name}\nAccessible headings in node:\n${headingsString}`,
+        `Node has no ${role}` +
+          (name === undefined
+            ? ''
+            : ` with name '${name}'\nAccessible ${role}s in tested react:\n${nodesWithWantedRoleString}`),
       );
     }
-    return this;
   }
 
   getFieldLabelled(label: string): HTMLElementTester {
@@ -120,7 +142,7 @@ export class ReactTester {
   }
 
   clickButtonNamed(name: string): this {
-    this.assertHasButtonNamed(name);
+    this.assertHasButtonLabelled(name);
     const queries = this.getQueries();
     const button = queries.getByRole('button', { name });
     userEvent.click(button);
