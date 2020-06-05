@@ -13,16 +13,20 @@ export interface Given {
 
 export class PLLTrainer implements Given {
   private readonly state: State['trainerState'];
-  constructor(
-    { state }: { state: State['trainerState'] } = { state: 'initial' },
-  ) {
+  private readonly algs: string[];
+  constructor({
+    state = 'initial',
+    algs = [],
+  }: { state?: State['trainerState']; algs?: string[] } = {}) {
     this.state = state;
+    this.algs = algs;
   }
 
   toString(): string {
     const stateToStringMap: { [state in State['trainerState']]: string } = {
       initial: '',
       'in between tests': ' in between tests',
+      'during test': ` during test with algs ${this.algs.join(', ')}`,
     };
     return `the PLL trainer${stateToStringMap[this.state]}`;
   }
@@ -32,6 +36,7 @@ export class PLLTrainer implements Given {
       (
         <PLLTrainerComponent
           initialState={{ trainerState: this.state, currentAlg: null }}
+          algs={this.algs}
         />
       ),
     );

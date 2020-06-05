@@ -10,7 +10,7 @@ import {
 import React, { useCallback, useReducer, useState } from 'react';
 
 export type State = {
-  trainerState: 'initial' | 'in between tests';
+  trainerState: 'initial' | 'in between tests' | 'during test';
   currentAlg: string | null;
 };
 type Action = {

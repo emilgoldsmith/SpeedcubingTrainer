@@ -3,10 +3,12 @@ import {
   IShouldSeeAButtonLabelled,
   IShouldSeeAHeadingTitled,
   IShouldSeeASolvedCube,
+  IShouldSeeLLCubeAfter,
 } from 'src/__tests__/acceptance-tests/then-implementations';
 import {
   IClickButtonLabelled,
   IDoNothing,
+  UnimplementedWhen,
 } from 'src/__tests__/acceptance-tests/when-implementations';
 
 import { FeatureAcceptanceTests } from './feature-acceptance-tests';
@@ -33,6 +35,20 @@ const ItShouldDisplayPLLTrainerInBetweenTests = new CompositeThen(
   ],
 );
 
+const ItShouldDisplayPLLTrainerDuringTestOfCubeInState = (
+  movesFromSolved: string[],
+): CompositeThen =>
+  new CompositeThen(
+    `it should display the PLL trainer during a test when cube is ${movesFromSolved.join(
+      '',
+    )} from solved`,
+    [
+      new IShouldSeeAHeadingTitled('PLL Trainer'),
+      new IShouldSeeLLCubeAfter(movesFromSolved),
+      new IShouldSeeAHeadingTitled('Press Space To End'),
+    ],
+  );
+
 const tests = [
   new AcceptanceTestCase({
     given: new PLLTrainer(),
@@ -48,6 +64,16 @@ const tests = [
     given: new PLLTrainer({ state: 'in between tests' }),
     when: new IDoNothing(),
     then: [ItShouldDisplayPLLTrainerInBetweenTests],
+  }),
+  new AcceptanceTestCase({
+    given: new PLLTrainer({ state: 'in between tests', algs: [['U']] }),
+    when: new UnimplementedWhen('I press space'),
+    then: [ItShouldDisplayPLLTrainerDuringTestOfCubeInState(["U'"])],
+  }),
+  new AcceptanceTestCase({
+    given: new PLLTrainer({ state: 'during test', currentAlg: ['U'] }),
+    when: new IDoNothing(),
+    then: [ItShouldDisplayPLLTrainerDuringTestOfCubeInState(["U'"])],
   }),
 ];
 

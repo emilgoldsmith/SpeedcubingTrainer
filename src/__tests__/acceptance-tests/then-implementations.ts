@@ -66,9 +66,43 @@ export class IShouldSeeASolvedCube implements Then {
 
   runAssertion(tester: ReactTester): ReactTester {
     return tester.assertHasImgWithSrcMatching((src) =>
-      /\/visualcube.php\?fmt=png&bg=t&sch=wrgyob&size=150&stage=ll&alg=$/.test(
-        src,
-      ),
+      isUrlForCube({ url: src, movesFromSolved: [] }),
     );
   }
+}
+
+export class IShouldSeeLLCubeAfter implements Then {
+  constructor(private readonly movesFromSolved: string[]) {}
+  toString(): string {
+    return `I should see an LL cube after ${this.movesFromSolved.join(
+      '',
+    )} has been applied from solved`;
+  }
+  runAssertion(tester: ReactTester): ReactTester {
+    return tester.assertHasImgWithSrcMatching((src) =>
+      isUrlForCube({
+        url: src,
+        movesFromSolved: this.movesFromSolved,
+        cubeMode: 'll',
+      }),
+    );
+  }
+}
+
+function isUrlForCube({
+  url,
+  movesFromSolved,
+  cubeMode,
+}: {
+  url: string;
+  movesFromSolved: string[];
+  cubeMode?: 'll';
+}): boolean {
+  const cubeModeString = cubeMode ? `&stage=${cubeMode}` : '';
+  const regex = new RegExp(
+    String.raw`\/visualcube.php\?fmt=png&bg=t&sch=wrgyob&size=150${cubeModeString}&alg=${movesFromSolved.join(
+      '',
+    )}$`,
+  );
+  return regex.test(url);
 }
