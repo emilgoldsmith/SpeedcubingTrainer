@@ -13,18 +13,36 @@ import { Algorithm } from 'src/common/cube';
 
 export type State = {
   trainerState: 'initial' | 'in between tests' | 'during test';
-  currentAlg: Algorithm | null;
+  currentAlg: Algorithm;
 };
-type Action = {
-  type: 'start training';
-};
+type Action =
+  | {
+      type: 'start training';
+    }
+  | {
+      type: 'next test';
+      payload: { nextAlg: Algorithm };
+    }
+  | {
+      type: 'finish test';
+    };
 const defaultInitialState: State = {
   trainerState: 'initial',
-  currentAlg: null,
+  currentAlg: new Algorithm(),
 };
 function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'start training': {
+      return { ...state, trainerState: 'in between tests' };
+    }
+    case 'next test': {
+      return {
+        ...state,
+        trainerState: 'during test',
+        currentAlg: action.payload.nextAlg,
+      };
+    }
+    case 'finish test': {
       return { ...state, trainerState: 'in between tests' };
     }
     default:
@@ -32,23 +50,39 @@ function reducer(state: State, action: Action): State {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const nullFunction = (): void => {};
 export const PLLTrainer: React.FC<{
   initialState?: State;
-  algs?: Algorithm[];
-}> = ({ initialState = defaultInitialState }) => {
+  algs: Algorithm[];
+}> = ({ initialState = defaultInitialState, algs }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const startTraining = useCallback(
     () => dispatch({ type: 'start training' }),
     [],
   );
-  const renderForState: {
-    [key in State['trainerState']]: React.ReactElement;
-  } = {
-    initial: <PLLTrainerInitial startTraining={startTraining} />,
-    'in between tests': <PLLTrainerInBetweenTests />,
-    'during test': <PLLTrainerDuringTests />,
-  };
-  return renderForState[state.trainerState];
+  switch (state.trainerState) {
+    case 'initial': {
+      document.body.onkeydown = nullFunction;
+      return <PLLTrainerInitial startTraining={startTraining} />;
+    }
+    case 'in between tests': {
+      document.body.onkeydown = (e): void => {
+        e.code === 'Space' &&
+          dispatch({ type: 'next test', payload: { nextAlg: algs[0] } });
+      };
+      return <PLLTrainerInBetweenTests />;
+    }
+    case 'during test': {
+      document.body.onkeydown = (e): void => {
+        e.code === 'Space' && dispatch({ type: 'finish test' });
+      };
+      return <PLLTrainerDuringTests algBeingTested={state.currentAlg} />;
+    }
+    default: {
+      throw new Error(`Unexpected default for ${state.trainerState}`);
+    }
+  }
 };
 
 const PLLTrainerInitial: React.FC<{ startTraining: () => void }> = ({
@@ -66,10 +100,10 @@ const PLLTrainerInitial: React.FC<{ startTraining: () => void }> = ({
 const PLLTrainerInBetweenTests: React.FC = () => {
   return (
     <PllTrainerPaper>
-      <Typography align="center" component="h2" variant="h4">
+      {/* <Typography align="center" component="h2" variant="h4">
         0.00
-      </Typography>
-      <LLCube algorithm=""></LLCube>
+      </Typography> */}
+      <LLCube movesFromSolved={new Algorithm()}></LLCube>
       <Typography align="center" component="h2" variant="h5">
         Press Space To Begin
       </Typography>
@@ -77,15 +111,14 @@ const PLLTrainerInBetweenTests: React.FC = () => {
   );
 };
 
-const PLLTrainerDuringTests: React.FC = () => {
+const PLLTrainerDuringTests: React.FC<{ algBeingTested: Algorithm }> = ({
+  algBeingTested,
+}) => {
   return (
     <PllTrainerPaper>
-      <Typography align="center" component="h2" variant="h4">
-        0.00
-      </Typography>
-      <LLCube algorithm=""></LLCube>
+      <LLCube movesFromSolved={algBeingTested.getInverse()} />
       <Typography align="center" component="h2" variant="h5">
-        Press Space To Begin
+        Press Space To End
       </Typography>
     </PllTrainerPaper>
   );
@@ -120,13 +153,13 @@ const PllTrainerPaper: React.FC = ({ children }) => {
 };
 
 type LLCubeProps = {
-  algorithm: string;
+  movesFromSolved: Algorithm;
 };
 
 const PRIMARY_VISUAL_CUBE_HOST = 'cube.crider.co.uk';
 const BACKUP_VISUAL_CUBE_HOST = '178.62.114.213';
 
-const LLCube: React.FC<LLCubeProps> = ({ algorithm }) => {
+const LLCube: React.FC<LLCubeProps> = ({ movesFromSolved }) => {
   const [visualCubeHost, setVisualCubeHost] = useState(
     PRIMARY_VISUAL_CUBE_HOST,
   );
@@ -134,20 +167,15 @@ const LLCube: React.FC<LLCubeProps> = ({ algorithm }) => {
     () => setVisualCubeHost(BACKUP_VISUAL_CUBE_HOST),
     [],
   );
-  const urlFriendlyAlg = removeSpaces(algorithm);
   const baseUrl = `http://${visualCubeHost}/visualcube.php?fmt=png&bg=t&sch=wrgyob&size=150&stage=ll&alg=`;
   return (
     <img
       onError={useBackupVisualCubeHost}
-      src={baseUrl + urlFriendlyAlg}
+      src={baseUrl + movesFromSolved.toString()}
       alt="Cube displaying PLL case"
     />
   );
 };
-
-function removeSpaces(str: string): string {
-  return str.replace(/\s+/g, '');
-}
 
 // type State = { startTime: number | null };
 // type Action = {

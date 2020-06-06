@@ -1,7 +1,12 @@
 // eslint-disable-next-line import/no-unassigned-import
 import '@testing-library/jest-dom/extend-expect';
 
-import { render, RenderResult, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  RenderResult,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
@@ -146,6 +151,14 @@ export class ReactTester {
     const queries = this.getQueries();
     const button = queries.getByRole('button', { name });
     userEvent.click(button);
+    return this;
+  }
+
+  pressSpace(): this {
+    fireEvent.keyDown(document.activeElement || document.body, {
+      key: ' ',
+      code: 'Space',
+    });
     return this;
   }
 

@@ -62,6 +62,21 @@ export class IShouldSeeASolvedCube implements Then {
     );
   }
 }
+export class IShouldSeeASolvedLLCube implements Then {
+  toString(): string {
+    return 'I should see a solved cube only displaying the last layer';
+  }
+
+  runAssertion(tester: ReactTester): ReactTester {
+    return tester.assertHasImgWithSrcMatching((src) =>
+      isUrlForCube({
+        url: src,
+        movesFromSolved: new Algorithm(),
+        cubeMode: 'll',
+      }),
+    );
+  }
+}
 
 export class IShouldSeeLLCubeAfter implements Then {
   constructor(private readonly movesFromSolved: Algorithm) {}
@@ -89,8 +104,13 @@ function isUrlForCube({
   cubeMode?: 'll';
 }): boolean {
   const cubeModeString = cubeMode ? `&stage=${cubeMode}` : '';
-  const regex = new RegExp(
-    String.raw`\/visualcube.php\?fmt=png&bg=t&sch=wrgyob&size=150${cubeModeString}&alg=${movesFromSolved.toString()}$`,
+  const expectedUrl = new URL(
+    `http://WeDontUseTheHostName.org/visualcube.php?fmt=png&bg=t&sch=wrgyob&size=150${cubeModeString}&alg=${movesFromSolved.toString()}`,
   );
-  return regex.test(url);
+  const givenUrl = new URL(url);
+  expectedUrl.searchParams.sort();
+  givenUrl.searchParams.sort();
+  const pathnameEqual = expectedUrl.pathname === givenUrl.pathname;
+  const searchEqual = expectedUrl.search === givenUrl.search;
+  return pathnameEqual && searchEqual;
 }

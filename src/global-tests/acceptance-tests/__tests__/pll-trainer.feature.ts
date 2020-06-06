@@ -3,14 +3,14 @@ import {
   CompositeThen,
   IClickButtonLabelled,
   IDoNothing,
+  IPressSpace,
   IShouldSeeAButtonLabelled,
   IShouldSeeAHeadingTitled,
-  IShouldSeeASolvedCube,
+  IShouldSeeASolvedLLCube,
   IShouldSeeLLCubeAfter,
   JestAcceptanceTestCase,
   JestFeatureAcceptanceTests,
   PLLTrainer,
-  UnimplementedWhen,
 } from 'src/global-tests/acceptance-tests';
 
 const ItShouldDisplayPLLTrainer = new CompositeThen(
@@ -25,8 +25,8 @@ const ItShouldDisplayPLLTrainerInBetweenTests = new CompositeThen(
   "it should display the PLL Trainer in it's in between tests state",
   [
     new IShouldSeeAHeadingTitled('PLL Trainer'),
-    new IShouldSeeAHeadingTitled('0.00'),
-    new IShouldSeeASolvedCube(),
+    // new IShouldSeeAHeadingTitled('0.00'),
+    new IShouldSeeASolvedLLCube(),
     new IShouldSeeAHeadingTitled('Press Space To Begin'),
   ],
 );
@@ -62,7 +62,7 @@ const tests = [
       state: 'in between tests',
       algs: [new Algorithm({ moveString: 'U' })],
     }),
-    when: new UnimplementedWhen('I press space'),
+    when: new IPressSpace(),
     then: [
       ItShouldDisplayPLLTrainerDuringTestOf(new Algorithm({ moveString: 'U' })),
     ],
@@ -81,7 +81,7 @@ const tests = [
     given: new PLLTrainer({
       state: 'during test',
     }),
-    when: new UnimplementedWhen('I press space'),
+    when: new IPressSpace(),
     then: [ItShouldDisplayPLLTrainerInBetweenTests],
   }),
 ];

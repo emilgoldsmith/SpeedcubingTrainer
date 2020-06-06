@@ -32,3 +32,12 @@ export class IClickButtonLabelled implements When {
     return tester.clickButtonNamed(this.buttonLabel);
   }
 }
+
+export class IPressSpace implements When {
+  toString(): string {
+    return 'I press space';
+  }
+  applyToTester(tester: ReactTester): ReactTester {
+    return tester.pressSpace();
+  }
+}

@@ -1,7 +1,7 @@
 class InvalidMove extends Error {}
 
 class Move {
-  private readonly validMovesClockwise = [
+  private readonly allValidMoves = [
     'U',
     'D',
     'F',
@@ -17,14 +17,11 @@ class Move {
     'Bw',
     'Rw',
     'Lw',
-  ];
-  private readonly validMovesCounterClockwise = this.validMovesClockwise.map(
-    (x) => x + "'",
-  );
-  private readonly allValidMoves = [
-    ...this.validMovesClockwise,
-    ...this.validMovesCounterClockwise,
-  ];
+  ]
+    // Add half turns
+    .flatMap((quarterMove) => [quarterMove, quarterMove + '2'])
+    // Add counterclockwise turns
+    .flatMap((clockwiseMove) => [clockwiseMove, clockwiseMove + "'"]);
 
   constructor(private readonly move: string) {
     if (!this.isValidMove(move)) {

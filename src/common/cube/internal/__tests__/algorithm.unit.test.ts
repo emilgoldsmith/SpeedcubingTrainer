@@ -31,7 +31,17 @@ describe('Algorithm', () => {
     expect(algorithm.toString()).toBe("UBw'F");
   });
 
-  const acceptedMovesClockwise = [
+  it('correctly parses and constructs a movestring with half turns', () => {
+    const algorithm = new Algorithm({ moveString: 'U2Rw2' });
+    expect(algorithm.toString()).toBe('U2Rw2');
+  });
+
+  it('correctly parses and constructs a movestring with counter clockwise half turns', () => {
+    const algorithm = new Algorithm({ moveString: "D2'Fw2'" });
+    expect(algorithm.toString()).toBe("D2'Fw2'");
+  });
+
+  const allAcceptedMoves = [
     'U',
     'D',
     'F',
@@ -47,14 +57,11 @@ describe('Algorithm', () => {
     'Bw',
     'Rw',
     'Lw',
-  ];
-  const acceptedMovesCounterClockwise = acceptedMovesClockwise.map(
-    (x) => x + "'",
-  );
-  const allAcceptedMoves = [
-    ...acceptedMovesClockwise,
-    ...acceptedMovesCounterClockwise,
-  ];
+  ]
+    // Add half turns
+    .flatMap((quarterMove) => [quarterMove, quarterMove + '2'])
+    // Add counterclockwise turns
+    .flatMap((clockwiseMove) => [clockwiseMove, clockwiseMove + "'"]);
 
   it("doesn't throw error for any valid move", () => {
     new Algorithm({ moveStringArray: allAcceptedMoves });

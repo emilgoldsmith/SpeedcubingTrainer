@@ -2,9 +2,9 @@
   "compilerOptions": {
     "target": "es6",
     "module": "CommonJS",
+    "lib": ["ES2019", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "alwaysStrict": true,
-    // "assumeChangesOnlyAffectDirectDependencies": true,
     "importsNotUsedAsValues": "remove",
     "sourceMap": true,
     "esModuleInterop": true,
