@@ -9,9 +9,11 @@ import {
 } from '@material-ui/core';
 import React, { useCallback, useReducer, useState } from 'react';
 
+import { Algorithm } from 'src/common/cube';
+
 export type State = {
   trainerState: 'initial' | 'in between tests' | 'during test';
-  currentAlg: string | null;
+  currentAlg: Algorithm | null;
 };
 type Action = {
   type: 'start training';
@@ -32,6 +34,7 @@ function reducer(state: State, action: Action): State {
 
 export const PLLTrainer: React.FC<{
   initialState?: State;
+  algs?: Algorithm[];
 }> = ({ initialState = defaultInitialState }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const startTraining = useCallback(
@@ -43,6 +46,7 @@ export const PLLTrainer: React.FC<{
   } = {
     initial: <PLLTrainerInitial startTraining={startTraining} />,
     'in between tests': <PLLTrainerInBetweenTests />,
+    'during test': <PLLTrainerDuringTests />,
   };
   return renderForState[state.trainerState];
 };
@@ -60,6 +64,20 @@ const PLLTrainerInitial: React.FC<{ startTraining: () => void }> = ({
 };
 
 const PLLTrainerInBetweenTests: React.FC = () => {
+  return (
+    <PllTrainerPaper>
+      <Typography align="center" component="h2" variant="h4">
+        0.00
+      </Typography>
+      <LLCube algorithm=""></LLCube>
+      <Typography align="center" component="h2" variant="h5">
+        Press Space To Begin
+      </Typography>
+    </PllTrainerPaper>
+  );
+};
+
+const PLLTrainerDuringTests: React.FC = () => {
   return (
     <PllTrainerPaper>
       <Typography align="center" component="h2" variant="h4">

@@ -1,13 +1,5 @@
-import { ReactTester } from 'src/common/components/test-utilities/react-tester';
-
-export interface Then {
-  toString(): string;
-  runAssertion(tester: ReactTester): ReactTester;
-}
-
-export function isThen(x: unknown): x is Then {
-  return ((x as Then).toString && (x as Then).runAssertion) !== undefined;
-}
+import { Algorithm, ReactTester } from './dependencies';
+import { Then } from './types';
 
 export class UnimplementedThen implements Then {
   private readonly spec: string;
@@ -66,17 +58,15 @@ export class IShouldSeeASolvedCube implements Then {
 
   runAssertion(tester: ReactTester): ReactTester {
     return tester.assertHasImgWithSrcMatching((src) =>
-      isUrlForCube({ url: src, movesFromSolved: [] }),
+      isUrlForCube({ url: src, movesFromSolved: new Algorithm() }),
     );
   }
 }
 
 export class IShouldSeeLLCubeAfter implements Then {
-  constructor(private readonly movesFromSolved: string[]) {}
+  constructor(private readonly movesFromSolved: Algorithm) {}
   toString(): string {
-    return `I should see an LL cube after ${this.movesFromSolved.join(
-      '',
-    )} has been applied from solved`;
+    return `I should see an LL cube after ${this.movesFromSolved.toString()} has been applied from solved`;
   }
   runAssertion(tester: ReactTester): ReactTester {
     return tester.assertHasImgWithSrcMatching((src) =>
@@ -95,14 +85,12 @@ function isUrlForCube({
   cubeMode,
 }: {
   url: string;
-  movesFromSolved: string[];
+  movesFromSolved: Algorithm;
   cubeMode?: 'll';
 }): boolean {
   const cubeModeString = cubeMode ? `&stage=${cubeMode}` : '';
   const regex = new RegExp(
-    String.raw`\/visualcube.php\?fmt=png&bg=t&sch=wrgyob&size=150${cubeModeString}&alg=${movesFromSolved.join(
-      '',
-    )}$`,
+    String.raw`\/visualcube.php\?fmt=png&bg=t&sch=wrgyob&size=150${cubeModeString}&alg=${movesFromSolved.toString()}$`,
   );
   return regex.test(url);
 }

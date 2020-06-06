@@ -1,10 +1,4 @@
-import {
-  isThen,
-  Then,
-} from 'src/__tests__/acceptance-tests/then-implementations';
-import { When } from 'src/__tests__/acceptance-tests/when-implementations';
-
-import { Given } from './given-implementations';
+import { AcceptanceTestCase, Given, isThen, Then, When } from './types';
 
 interface AssertionComponent {
   defineTests(given: Given, when: When): void;
@@ -64,7 +58,7 @@ type ImplementedTestCaseArgs = {
   then: ThenInput;
 };
 
-export class AcceptanceTestCase {
+export class JestAcceptanceTestCase implements AcceptanceTestCase {
   private given: Given;
   private when: When;
   private assertions: AssertionComponent;
@@ -73,7 +67,7 @@ export class AcceptanceTestCase {
     this.when = when;
     this.assertions = new AssertionRoot(thenInput);
   }
-  defineJestTest(): void {
+  defineTest(): void {
     describe(this.buildDescribeDescription(), () => {
       this.assertions.defineTests(this.given, this.when);
     });

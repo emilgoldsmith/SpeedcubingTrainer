@@ -50,7 +50,7 @@ class Move {
 }
 
 class MoveParser {
-  parseMoves(moveString: string): Move[] {
+  fromMoveString(moveString: string): Move[] {
     let restOfMoveString = moveString;
     const moveObjectArray = [];
     while (restOfMoveString.length > 0) {
@@ -79,10 +79,10 @@ class MoveParser {
           restOfString: moveString.substring(prefixLength),
         };
       } catch (e) {
-        if (e instanceof InvalidMove) {
-          continue;
+        const isExpectedError = e instanceof InvalidMove;
+        if (!isExpectedError) {
+          throw e;
         }
-        throw e;
       }
     }
     throw new Error(`No valid moves in start of ${moveString}`);
@@ -92,10 +92,14 @@ class MoveParser {
 export class Algorithm {
   private moveArray: Move[];
 
-  constructor(arg: { moveString: string } | { moveStringArray: string[] }) {
+  constructor(
+    arg: { moveString: string } | { moveStringArray: string[] } = {
+      moveStringArray: [],
+    },
+  ) {
     try {
       if ('moveString' in arg) {
-        this.moveArray = new MoveParser().parseMoves(arg.moveString);
+        this.moveArray = new MoveParser().fromMoveString(arg.moveString);
       } else {
         this.moveArray = arg.moveStringArray.map((x) => new Move(x));
       }

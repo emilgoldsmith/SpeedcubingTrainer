@@ -1,21 +1,17 @@
-import { PLLTrainer } from 'src/__tests__/acceptance-tests/given-implementations';
+import { Algorithm } from 'src/common/cube';
 import {
+  CompositeThen,
+  IClickButtonLabelled,
+  IDoNothing,
   IShouldSeeAButtonLabelled,
   IShouldSeeAHeadingTitled,
   IShouldSeeASolvedCube,
   IShouldSeeLLCubeAfter,
-} from 'src/__tests__/acceptance-tests/then-implementations';
-import {
-  IClickButtonLabelled,
-  IDoNothing,
+  JestAcceptanceTestCase,
+  JestFeatureAcceptanceTests,
+  PLLTrainer,
   UnimplementedWhen,
-} from 'src/__tests__/acceptance-tests/when-implementations';
-
-import { FeatureAcceptanceTests } from './feature-acceptance-tests';
-import {
-  AcceptanceTestCase,
-  CompositeThen,
-} from './implemented-acceptance-test-case';
+} from 'src/global-tests/acceptance-tests';
 
 const ItShouldDisplayPLLTrainer = new CompositeThen(
   "it should display the PLL trainer in it's initial state",
@@ -35,49 +31,62 @@ const ItShouldDisplayPLLTrainerInBetweenTests = new CompositeThen(
   ],
 );
 
-const ItShouldDisplayPLLTrainerDuringTestOfCubeInState = (
-  movesFromSolved: string[],
-): CompositeThen =>
+const ItShouldDisplayPLLTrainerDuringTestOf = (alg: Algorithm): CompositeThen =>
   new CompositeThen(
-    `it should display the PLL trainer during a test when cube is ${movesFromSolved.join(
-      '',
-    )} from solved`,
+    `it should display the PLL trainer during a test of ${alg.toString()}`,
     [
       new IShouldSeeAHeadingTitled('PLL Trainer'),
-      new IShouldSeeLLCubeAfter(movesFromSolved),
+      new IShouldSeeLLCubeAfter(alg.getInverse()),
       new IShouldSeeAHeadingTitled('Press Space To End'),
     ],
   );
 
 const tests = [
-  new AcceptanceTestCase({
+  new JestAcceptanceTestCase({
     given: new PLLTrainer(),
     when: new IDoNothing(),
     then: [ItShouldDisplayPLLTrainer],
   }),
-  new AcceptanceTestCase({
+  new JestAcceptanceTestCase({
     given: new PLLTrainer(),
     when: new IClickButtonLabelled('Start'),
     then: [ItShouldDisplayPLLTrainerInBetweenTests],
   }),
-  new AcceptanceTestCase({
+  new JestAcceptanceTestCase({
     given: new PLLTrainer({ state: 'in between tests' }),
     when: new IDoNothing(),
     then: [ItShouldDisplayPLLTrainerInBetweenTests],
   }),
-  new AcceptanceTestCase({
-    given: new PLLTrainer({ state: 'in between tests', algs: [['U']] }),
+  new JestAcceptanceTestCase({
+    given: new PLLTrainer({
+      state: 'in between tests',
+      algs: [new Algorithm({ moveString: 'U' })],
+    }),
     when: new UnimplementedWhen('I press space'),
-    then: [ItShouldDisplayPLLTrainerDuringTestOfCubeInState(["U'"])],
+    then: [
+      ItShouldDisplayPLLTrainerDuringTestOf(new Algorithm({ moveString: 'U' })),
+    ],
   }),
-  new AcceptanceTestCase({
-    given: new PLLTrainer({ state: 'during test', currentAlg: ['U'] }),
+  new JestAcceptanceTestCase({
+    given: new PLLTrainer({
+      state: 'during test',
+      currentAlg: new Algorithm({ moveString: 'U' }),
+    }),
     when: new IDoNothing(),
-    then: [ItShouldDisplayPLLTrainerDuringTestOfCubeInState(["U'"])],
+    then: [
+      ItShouldDisplayPLLTrainerDuringTestOf(new Algorithm({ moveString: 'U' })),
+    ],
+  }),
+  new JestAcceptanceTestCase({
+    given: new PLLTrainer({
+      state: 'during test',
+    }),
+    when: new UnimplementedWhen('I press space'),
+    then: [ItShouldDisplayPLLTrainerInBetweenTests],
   }),
 ];
 
-export const pllTrainerAcceptanceTests: FeatureAcceptanceTests = new FeatureAcceptanceTests(
+export const pllTrainerAcceptanceTests = new JestFeatureAcceptanceTests(
   'PLL Trainer',
   tests,
 );

@@ -1,9 +1,6 @@
-import { ReactTester } from 'src/common/components/test-utilities/react-tester';
+import { ReactTester } from './dependencies';
 
-export interface When {
-  toString(): string;
-  applyToTester(tester: ReactTester): ReactTester;
-}
+import type { When } from './types';
 
 export class UnimplementedWhen implements When {
   constructor(private readonly spec: string) {}

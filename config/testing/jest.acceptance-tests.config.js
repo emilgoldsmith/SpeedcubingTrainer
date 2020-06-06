@@ -12,7 +12,7 @@ module.exports = {
       displayName: 'Acceptance Tests',
       testEnvironment: 'jsdom',
       testMatch: [
-        '<rootDir>/src/__tests__/acceptance-tests/run-acceptance-tests.ts',
+        '<rootDir>/src/global-tests/acceptance-tests/__tests__/run-acceptance-tests.ts',
       ],
     },
   ],

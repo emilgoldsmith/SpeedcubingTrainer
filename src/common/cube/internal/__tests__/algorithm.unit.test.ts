@@ -21,6 +21,16 @@ describe('Algorithm', () => {
     ).toThrowError(JSON.stringify(['a', 'b', 'c']));
   });
 
+  it('correctly parses and constructs a movestring with counterclockwise moves', () => {
+    const algorithm = new Algorithm({ moveString: "UB'F" });
+    expect(algorithm.toString()).toBe("UB'F");
+  });
+
+  it('correctly parses and constructs a movestring with wide counterclockwise moves', () => {
+    const algorithm = new Algorithm({ moveString: "UBw'F" });
+    expect(algorithm.toString()).toBe("UBw'F");
+  });
+
   const acceptedMovesClockwise = [
     'U',
     'D',
