@@ -64,7 +64,7 @@ teardown() {
 run_production_docker_compose_command up --build --detach
 
 (docker run \
-    --mount "type=bind,source=$(pwd)/src/__tests__/end-to-end,target=$E2E_tests_docker_path" \
+    --mount "type=bind,source=$(pwd)/src/global-tests/end-to-end,target=$E2E_tests_docker_path" \
     --mount "type=bind,source=$(pwd)/end-to-end-screenshots,target=/end-to-end-screenshots" \
     --net=host \
     -t \
