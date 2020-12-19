@@ -69,8 +69,6 @@ git_has_no_changes || (
     exit 1
 )
 
-build_docker_image
-
 ./scripts/build-eslint-rules.sh
 echo -e "${GREEN}Files built. Just running prettier to normalize diff${NC}"
 run_command_in_docker_with_write_access ./scripts/pre-configured-commands/prettier.sh --write &> /dev/null

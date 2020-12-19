@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
+exports.ImportPath = exports.FilePath = exports.Path = void 0;
 const path_parser_1 = require('./path-parser');
 class Path {
   constructor(path) {
