@@ -181,7 +181,7 @@ export class ReactTester {
       this.errorThrower.throw(
         `There seems to have been an issue rendering the React element. Remember to call assertRenders in a test and make sure that passes. The error was:\n${this.renderError}`,
       );
-      throw 'this is a type hack, the above function already throws but Typescript doesn\'t seem to infer from it as it usually does despite the never type';
+      throw "this is a type hack, the above function already throws but Typescript doesn't seem to infer from it as it usually does despite the never type";
     }
     return this.testingLibraryQueries;
   }
