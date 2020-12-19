@@ -53,6 +53,8 @@ build_docker_image () {
 
 ## SHELL BOILERPLATE STOPS HERE. FEEL FREE TO EDIT ANYTHING BELOW THIS COMMENT
 
+build_docker_image
+
 run_command_in_docker_with_write_access rm -rf $ROOT_DIRECTORY/config/linting/custom-eslint-rules/built-rules
 
 run_command_in_docker_with_write_access $ROOT_DIRECTORY/node_modules/.bin/tsc -p $ROOT_DIRECTORY/config/linting/custom-eslint-rules/tsconfig.json

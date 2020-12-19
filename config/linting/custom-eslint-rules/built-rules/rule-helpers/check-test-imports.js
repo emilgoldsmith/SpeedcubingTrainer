@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
+exports.checkTestImports = exports.getTestImportErrorMessages = void 0;
 /* eslint-disable @typescript-eslint/camelcase */
 const errorMessages = {
   __testImport__wrongImportFromTestFile:
