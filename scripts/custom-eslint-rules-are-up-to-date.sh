@@ -65,7 +65,7 @@ git_has_no_changes() {
 
 git_has_no_changes || (
     echo -e "${RED}Working tree should be clean before running this command${NC}" &&
-    git status &&
+    git status && git diff &&
     exit 1
 )
 
@@ -75,7 +75,7 @@ run_command_in_docker_with_write_access ./scripts/pre-configured-commands/pretti
 
 git_has_no_changes || (
     echo -e "${RED}It seems you forgot to build the eslint rules after changing them. They are up to date now though the changes are unstaged in git${NC}" &&
-    git status &&
+    git status && git diff &&
     exit 1
 )
 echo -e "${GREEN}Our custom eslint rules are up to date with source${NC}"
