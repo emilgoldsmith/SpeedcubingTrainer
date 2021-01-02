@@ -1,0 +1,429 @@
+<html>
+  <head>
+    <style>
+      .face {
+        width: 2em;
+        height: 2em;
+        transform-origin: center center -1em;
+        transform-style: preserve-3d;
+        border: black solid 0.2em;
+        box-sizing: border-box;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate3d(1, 1, 1, 0);
+        }
+        to {
+          transform: rotate3d(1, 1, 1, 360deg);
+        }
+      }
+
+      .front-face {
+        transform: rotateY(0) rotateX(0) rotateZ(0);
+      }
+      .left-face {
+        transform: rotateY(-90deg);
+      }
+      .right-face {
+        transform: rotateY(90deg);
+      }
+      .back-face {
+        transform: rotateY(180deg);
+      }
+      .up-face {
+        transform: rotateX(90deg);
+      }
+      .down-face {
+        transform: rotateX(-90deg);
+      }
+      .orange {
+        background-color: orange;
+      }
+      .black {
+        background-color: black;
+      }
+      .white {
+        background-color: white;
+      }
+      .green {
+        background-color: green;
+      }
+      .blue {
+        background-color: blue;
+      }
+      .yellow {
+        background-color: yellow;
+      }
+      .red {
+        background-color: red;
+      }
+
+      .spin-animation {
+        transform-style: preserve-3d;
+        animation-name: spin;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+      }
+
+      .cubie {
+        transform-style: preserve-3d;
+        transform-origin: center center -1em;
+        display: inline-block;
+        width: 2em;
+        height: 2em;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .UFL {
+        top: 0;
+        left: 0;
+      }
+      .UFR {
+        top: 0;
+        left: 4em;
+      }
+      .UF {
+        top: 0;
+        left: 2em;
+      }
+      .FR {
+        top: 2em;
+        left: 4em;
+      }
+      .F {
+        top: 2em;
+        left: 2em;
+      }
+      .FL {
+        top: 2em;
+        left: 0;
+      }
+      .DFR {
+        top: 4em;
+        left: 4em;
+      }
+      .DF {
+        top: 4em;
+        left: 2em;
+      }
+      .DFL {
+        top: 4em;
+        left: 0em;
+      }
+      .U {
+        top: 0;
+        left: 2em;
+        transform: translateZ(-2em);
+      }
+      .UR {
+        top: 0;
+        left: 4em;
+        transform: translateZ(-2em);
+      }
+      .R {
+        top: 2em;
+        left: 4em;
+        transform: translateZ(-2em);
+      }
+      .DR {
+        top: 4em;
+        left: 4em;
+        transform: translateZ(-2em);
+      }
+      .D {
+        top: 4em;
+        left: 2em;
+        transform: translateZ(-2em);
+      }
+      .DL {
+        top: 4em;
+        left: 0;
+        transform: translateZ(-2em);
+      }
+      .L {
+        top: 2em;
+        left: 0;
+        transform: translateZ(-2em);
+      }
+      .UL {
+        top: 0;
+        left: 0;
+        transform: translateZ(-2em);
+      }
+      .UBL {
+        top: 0;
+        left: 0;
+        transform: translateZ(-4em);
+      }
+      .UB {
+        top: 0;
+        left: 2em;
+        transform: translateZ(-4em);
+      }
+      .UBR {
+        top: 0;
+        left: 4em;
+        transform: translateZ(-4em);
+      }
+      .BL {
+        top: 2em;
+        left: 0;
+        transform: translateZ(-4em);
+      }
+      .B {
+        top: 2em;
+        left: 2em;
+        transform: translateZ(-4em);
+      }
+      .BR {
+        top: 2em;
+        left: 4em;
+        transform: translateZ(-4em);
+      }
+      .DBL {
+        top: 4em;
+        left: 0;
+        transform: translateZ(-4em);
+      }
+      .DB {
+        top: 4em;
+        left: 2em;
+        transform: translateZ(-4em);
+      }
+      .DBR {
+        top: 4em;
+        left: 4em;
+        transform: translateZ(-4em);
+      }
+    </style>
+  </head>
+  <body>
+    <div style="padding: 200px">
+      <div
+        class="spin-animation"
+        style="
+          width: 6em;
+          height: 6em;
+          transform-origin: center center -3em;
+          position: relative;
+          font-size: 50px;
+        "
+      >
+        <div class="cubie UFL">
+          <div class="face front-face green"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie UF">
+          <div class="face front-face green"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie UFR">
+          <div class="face front-face green"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie FL">
+          <div class="face front-face green"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie FR">
+          <div class="face front-face green"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie F">
+          <div class="face front-face green"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie DFR">
+          <div class="face front-face green"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie DF">
+          <div class="face front-face green"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie DFL">
+          <div class="face front-face green"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie UR">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie U">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie UL">
+          <div class="face front-face black"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie L">
+          <div class="face front-face black"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie DL">
+          <div class="face front-face black"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie D">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie DR">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie R">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face black"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie UBL">
+          <div class="face front-face black"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie UB">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie UBR">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face white"></div>
+        </div>
+        <div class="cubie BR">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie B">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie BL">
+          <div class="face front-face black"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face black"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie DBL">
+          <div class="face front-face black"></div>
+          <div class="face left-face orange"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie DB">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face black"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+        <div class="cubie DBR">
+          <div class="face front-face black"></div>
+          <div class="face left-face black"></div>
+          <div class="face right-face red"></div>
+          <div class="face back-face blue"></div>
+          <div class="face down-face yellow"></div>
+          <div class="face up-face black"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
