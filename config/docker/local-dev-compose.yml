@@ -28,7 +28,7 @@ services:
     # --host 0.0.0.0 to access it from outside container we need to expose it publicly inside
     # --public localhost:3000 just for convenience so we can use localhost outside the container (otherwise the HOST check will fail)
     command: >
-      ./node_modules/.bin/webpack-dev-server
+      ./node_modules/.bin/webpack serve
       --config config/webpack/local-dev.config.ts
       --port 3000
       --host 0.0.0.0
